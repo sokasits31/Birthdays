@@ -1,0 +1,132 @@
+<HTML>
+<HEAD>
+    <STYLE>
+        table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+}
+    </STYLE>
+
+
+
+</HEAD>
+<H2>Family Birthdays</H2>
+
+<p id="demo"></p>
+
+
+<SCRIPT>
+
+var birthday1 = {name:"Steve", birthDate:new Date('06/09/1972'), dayUntil:0, age:0}
+var birthday2 = {name:"Lea", birthDate:new Date('07/21/2008'), dayUntil:0, age:0}
+var birthday3 = {name:"Bradley", birthDate:new Date('10/16/2010'), dayUntil:0, age:0}
+var birthday4 = {name:"Heather", birthDate:new Date('04/22/1977'), dayUntil:0, age:0}
+var birthday5 = {name:"Oliver", birthDate:new Date('12/23/2016'), dayUntil:0, age:0}
+var birthday6 = {name:"Ed", birthDate:new Date('09/05/1969'), dayUntil:0, age:0}
+var birthday7 = {name:"Frank Sr", birthDate:new Date('08/29/1933'), dayUntil:0, age:0}
+var birthday8 = {name:"Elaine", birthDate:new Date('06/24/1934'), dayUntil:0, age:0}
+var birthday9 = {name:"Franky", birthDate:new Date('10/29/2002'), dayUntil:0, age:0}
+var birthday10 = {name:"Wayne", birthDate:new Date('10/30/1950'), dayUntil:0, age:0}
+
+
+
+const birthdays = []
+birthdays[0] = birthday1;
+birthdays[1] = birthday2;
+birthdays[2] = birthday3;
+birthdays[3] = birthday4;
+birthdays[4] = birthday5;
+birthdays[5] = birthday6;
+birthdays[6] = birthday7;
+birthdays[7] = birthday8;
+birthdays[8] = birthday9;
+birthdays[9] = birthday10;
+
+
+var today = new Date()
+today_ccyy = today.getFullYear();
+today_mm   = today.getMonth() + 1;
+today_dd   = today.getDate();
+
+var daysThisYear = getDaysThisYear(today_ccyy, 12, 31)    // 365...  366 on Leap Year
+var daysNextYear = getDaysThisYear(today_ccyy + 1, 12, 31)
+var daysAsOfNow  = getDaysThisYear(today_ccyy, today_mm, today_dd)
+
+for (let i = 0; i < birthdays.length; i++) {
+   
+   birth_ccyy = birthdays[i].birthDate.getFullYear();
+   birth_mm   = birthdays[i].birthDate.getMonth() + 1;
+   birth_dd   = birthdays[i].birthDate.getDate();
+   
+   var birthdayDay = getDaysThisYear(today_ccyy, birth_mm, birth_dd);
+   
+   // Birthday is this year   
+   if (daysAsOfNow < birthdayDay) {
+        birthdays[i].dayUntil = birthdayDay - daysAsOfNow;   
+        birthdays[i].age = today_ccyy - birth_ccyy;    
+   } 
+   // Birthday is next year
+   else if (daysAsOfNow > birthdayDay) {
+        birthdays[i].dayUntil = (daysThisYear - daysAsOfNow) + getDaysThisYear(today_ccyy + 1, birth_mm, birth_dd);
+        birthdays[i].age = (today_ccyy + 1) - birth_ccyy; 
+   } 
+   // Birthday today
+   else {
+       birthdays[i].dayUntil = 0;
+       birthdays[i].age = today_ccyy - birth_ccyy; 
+   } 
+ 
+}
+
+// Sort by next event
+birthdays.sort((a, b) => (a.dayUntil - b.dayUntil));
+
+document.writeln("<TABLE>")
+document.writeln("<TR>")
+    document.writeln("<TH>Name</<TH>")
+    document.writeln("<TH>Birthday</TH>")    
+    document.writeln("<TH>Days until next Birthday</<TH>")
+    document.writeln("<TH>Age at next birthday</<TH>")       
+document.writeln("</TR>")
+
+for (let i = 0; i < birthdays.length; i++) {
+    console.log("Name:" + birthdays[i].name)
+    console.log("Days:" + birthdays[i].dayUntil)
+    console.log("Age:" + birthdays[i].age)
+    document.writeln("<TR>")
+    document.writeln("<TD>" + birthdays[i].name + "</TD>")
+    document.writeln("<TD>" + (birthdays[i].birthDate.getMonth() + 1)  +
+                        "/" + birthdays[i].birthDate.getDate()   + "</TD>")
+    document.writeln("<TD>" + birthdays[i].dayUntil + "</TD>")
+    document.writeln("<TD>" + birthdays[i].age + "</TD>")    
+    document.writeln("</TR>")
+
+}    
+document.writeln("</TABLE>")
+
+
+
+function getDaysThisYear(year, month, day) {
+
+var days = 0;
+
+for (let i = 1; i < month; i++) {
+    days = days + getDaysInMonth(year, i)
+}
+
+return days + day;
+}
+
+
+function getDaysInMonth(year, month) {
+return new Date(year, month, 0).getDate();
+}
+
+</SCRIPT>
+
+
+
+</HTML>
